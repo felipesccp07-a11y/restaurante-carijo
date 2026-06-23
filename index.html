@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurante Carijó | Do Sítio à Mesa na MG-449</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Patua+One&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --mint-cream: #F4FFFD;     
+            --golden-apricot: #CB904D; 
+            --deep-mocha: #4E3630;     
+            --text-dark: #2A1E1B;
+            --white: #ffffff;
+            --border-soft: rgba(78, 54, 48, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--mint-cream);
+            color: var(--text-dark);
+            font-family: 'Lora', serif;
+            line-height: 1.7;
+            font-size: 1.1rem;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1140px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Patua One', serif;
+            color: var(--deep-mocha);
+            letter-spacing: 0.5px;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--golden-apricot);
+            color: var(--white);
+            padding: 16px 36px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-family: 'Patua One', serif;
+            font-size: 1.15rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            box-shadow: 0 4px 12px rgba(203, 144, 77, 0.3);
+            text-align: center;
+            border: 2px solid transparent;
+        }
+
+        .btn:hover {
+            background-color: var(--deep-mocha);
+            color: var(--golden-apricot);
+            border-color: var(--golden-apricot);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(78, 54, 48, 0.4);
+        }
+
+        .lp-img-box {
+            background-color: #efeae4;
+            border: 2px solid var(--deep-mocha);
+            outline: 4px solid var(--golden-apricot);
+            outline-offset: -12px;
+            border-radius: 4px;
+            overflow: hidden;
+            display: block;
+            width: 100%;
+        }
+
+        .lp-img-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.5s ease;
+        }
+
+        .lp-img-box:hover img { transform: scale(1.03); }
+
+        header {
+            background: linear-gradient(rgba(42, 30, 27, 0.75), rgba(42, 30, 27, 0.85)), url('topo-buffet.jpg') no-repeat center center/cover;
+            background-color: var(--deep-mocha);
+            padding: 140px 0;
+            text-align: center;
+            color: var(--mint-cream);
+            border-bottom: 6px solid var(--golden-apricot);
+        }
+
+        header h1 {
+            color: var(--mint-cream);
+            font-size: 3.5rem;
+            margin-bottom: 24px;
+            line-height: 1.2;
+        }
+
+        header h1 span { color: var(--golden-apricot); }
+        header p { font-size: 1.3rem; margin-bottom: 40px; max-width: 800px; margin-left: auto; margin-right: auto; }
+
+        .section-header { text-align: center; margin-bottom: 60px; }
+        .section-header h2 { font-size: 2.5rem; position: relative; display: inline-block; padding-bottom: 15px; }
+        .section-header h2::after { content: ''; position: absolute; bottom: 0; left: 25%; width: 50%; height: 3px; background-color: var(--golden-apricot); }
+
+        .farm-to-table { padding: 100px 0; background-color: var(--white); }
+        .farm-intro { text-align: center; max-width: 800px; margin: -30px auto 60px auto; font-size: 1.2rem; }
+        .farm-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; }
+        .farm-card { background: var(--mint-cream); border: 1px solid var(--border-soft); border-radius: 4px; overflow: hidden; box-shadow: 0 4px 15px rgba(78, 54, 48, 0.03); transition: transform 0.3s ease; }
+        .farm-card:hover { transform: translateY(-5px); }
+        .farm-card .lp-img-box { border: none; outline: none; border-bottom: 3px solid var(--golden-apricot); border-radius: 0; height: 240px; }
+        .farm-card-content { padding: 30px; }
+        .farm-card h3 { font-size: 1.5rem; margin-bottom: 12px; color: var(--deep-mocha); }
+        .farm-card h3 span { color: var(--golden-apricot); display: block; font-size: 0.9rem; text-transform: uppercase; margin-bottom: 4px; }
+
+        .amenities { padding: 100px 0; background-color: var(--mint-cream); }
+        .grid-amenities { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 32px; }
+        .card-amenity { background-color: var(--white); padding: 35px; border-radius: 4px; border: 1px solid var(--border-soft); transition: all 0.3s ease; }
+        .card-amenity:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(78, 54, 48, 0.05); border-color: var(--golden-apricot); }
+        .card-amenity .icon-box { font-size: 2.5rem; color: var(--golden-apricot); margin-bottom: 20px; }
+
+        .city-view { padding: 100px 0; background-color: var(--deep-mocha); color: var(--mint-cream); border-top: 4px solid var(--golden-apricot); border-bottom: 4px solid var(--golden-apricot); }
+        .city-view span { color: var(--golden-apricot); }
+        .view-split { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 60px; align-items: center; }
+        .view-content p { font-size: 1.2rem; margin-bottom: 30px; color: #dfd5d2; }
+
+        .pricing { padding: 100px 0; background-color: var(--white); }
+        .price-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 50px; }
+        .price-card { background-color: var(--mint-cream); padding: 45px; border-radius: 4px; border: 2px solid var(--deep-mocha); text-align: center; }
+        .price-card.featured { background-color: var(--deep-mocha); color: var(--mint-cream); border-color: var(--golden-apricot); }
+        .price-card.featured h4 { color: var(--mint-cream); }
+        .price-card h4 { font-size: 1.6rem; margin-bottom: 20px; text-transform: uppercase; }
+        .price-card .value { font-size: 3.5rem; font-family: 'Patua One', serif; color: var(--golden-apricot); margin-bottom: 20px; }
+        .price-card .value span { font-size: 1.1rem; font-family: 'Lora', serif; color: var(--text-dark); display: block; }
+        .price-card.featured .value span { color: #bfaea9; }
+
+        .map-location { padding: 100px 0; text-align: center; }
+        .map-details p { font-size: 1.25rem; margin-bottom: 15px; }
+        .badge-road { display: inline-block; background-color: var(--deep-mocha); color: var(--golden-apricot); padding: 6px 20px; font-family: 'Patua One', serif; font-size: 1.2rem; border-radius: 4px; margin-bottom: 20px; }
+        .hours-box { display: flex; justify-content: center; gap: 30px; margin: 40px 0; flex-wrap: wrap; }
+        .hours-card { background: var(--white); border: 1px solid var(--border-soft); padding: 24px 40px; border-radius: 4px; }
+        .hours-card strong { display: block; color: var(--golden-apricot); font-family: 'Patua One', serif; font-size: 1.4rem; margin-bottom: 6px; }
+
+        footer { background-color: #2D1F1C; color: #bfaea9; padding: 50px 0; text-align: center; border-top: 4px solid var(--golden-apricot); }
+
+        @media (max-width: 960px) { header h1 { font-size: 2.6rem; } .view-split { grid-template-columns: 1fr; gap: 40px; } .price-grid { grid-template-columns: 1fr; gap: 30px; } }
+        @media (max-width: 600px) { header h1 { font-size: 2.1rem; } .section-header h2 { font-size: 2rem; } .price-card .value { font-size: 2.8rem; } .hours-box { flex-direction: column; gap: 16px; } }
+    </style>
+</head>
+<body>
+
+    <!-- [SEÇÃO 1] HERO -->
+    <header>
+        <div class="container">
+            <h1>O Legítimo Sabor de Minas: <span>Do Sítio Direto para a sua Mesa</span></h1>
+            <p>Faça a melhor parada da rodovia MG-449. No Restaurante Carijó, além do tradicional Self-Service Livre, você saboreia a essência da roça com hortaliças e cafés artesanais de produção própria.</p>
+            <a href="https://www.google.com/maps/place/Restaurante+e+Lanchonete+Carij%C3%B3/@-21.3596353,-46.9470792,19z/data=!4m10!1m2!2m1!1zY2FyaWrDsw!3m6!1s0x94b7b104921769f9:0x5c813c8291e733a!8m2!3d-21.3598662!4d-46.9459332!15sCgdjYXJpasOzWgkiB2Nhcmlqw7OSAQpyZXN0YXVyYW504AEA!16s%2Fg%2F11xgv1x72n?entry=ttu&g_ep=EgoyMDI2MDYxNi4wIKXMDSoASAFQAw%3D%3D" target="_blank" class="btn">Abrir Rota no GPS da Estrada</a>
+        </div>
+    </header>
+
+    <!-- [SEÇÃO 2] CONCEITO: DO SÍTIO À MESA -->
+    <section class="farm-to-table">
+        <div class="container">
+            <div class="section-header">
+                <h2>Nossa Tradição Tem Origem</h2>
+            </div>
+            <p class="farm-intro">
+                Aqui no Carijó, nós não apenas servimos comida; nós cultivamos tradição. Grande parte do frescor que você encontra na nossa mesa é produzido com carinho no <strong>nosso próprio sítio familiar</strong>. É o verdadeiro orgulho de Minas Gerais servido na beira da pista!
+            </p>
+            
+            <div class="farm-grid">
+                <div class="farm-card">
+                    <div class="lp-img-box">
+                        <img src="sitio-cafe.jpg" alt="Plantação de Café Orgânico do Sítio Carijó">
+                    </div>
+                    <div class="farm-card-content">
+                        <h3><span>Cultivo Próprio</span>Nosso Café Especial</h3>
+                        <p>Colhido, tratado e preparado diretamente na nossa propriedade. Aquele cafezinho fresco com o aroma autêntico da roça para te dar energia e foco no restante da viagem.</p>
+                    </div>
+                </div>
+
+                <div class="farm-card">
+                    <div class="lp-img-box">
+                        <img src="sitio-01.jpg" alt="Horta de Alface Fresca do Restaurante Carijó">
+                    </div>
+                    <div class="farm-card-content">
+                        <h3><span>Frescor Diário</span>Verduras da Nossa Terra</h3>
+                        <p>Hortaliças cultivadas com água limpa e sem defensivos pesados. Colhemos nossas alfaces e verduras crocantes direto da terra para abastecer o buffet todas as manhãs.</p>
+                    </div>
+                </div>
+
+                <div class="farm-card">
+                    <div class="lp-img-box">
+                        <img src="sitio-02.jpg" alt="Plantação de Couve e Legumes da Roça Carijó">
+                    </div>
+                    <div class="farm-card-content">
+                        <h3><span>Tradição da Roça</span>Hortifrúti Selecionado</h3>
+                        <p>Da couve fininha que acompanha a feijoada aos ingredientes principais dos pratos típicos. O verdadeiro gosto da culinária mineira caipira começa no cuidado com o nosso plantio.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- [SEÇÃO 3] CONVENIÊNCIAS -->
+    <section class="amenities">
+        <div class="container">
+            <div class="section-header">
+                <h2>O Alívio Completo do Viajante</h2>
+            </div>
+            <div class="grid-amenities">
+                <div class="card-amenity">
+                    <div class="icon-box">🚛</div>
+                    <h3>Pátio Amplo e Seguro</h3>
+                    <p>Espaço projetado para manobra fácil de carretas, bitrens, ônibus de viagem e carros de passeio com total tranquilidade.</p>
+                </div>
+                <div class="card-amenity">
+                    <div class="icon-box">❄️</div>
+                    <h3>Salão Climatizado</h3>
+                    <p>Esqueça o mormaço da rodovia. Almoce e descanse em um ambiente com ar-condicionado fresco e acolhedor.</p>
+                </div>
+                <div class="card-amenity">
+                    <div class="icon-box">🚿</div>
+                    <h3>Chuveiro e Banheiros</h3>
+                    <p>Banheiros higienizados a todo momento e estrutura de banho pronta para o caminhoneiro renovar as energias.</p>
+                </div>
+                <div class="card-amenity">
+                    <div class="icon-box">⚡</div>
+                    <h3>Tomadas nas Mesas</h3>
+                    <p>Mantenha seu celular e o GPS da viagem carregados enquanto aproveita a sua parada.</p>
+                </div>
+                <div class="card-amenity">
+                    <div class="icon-box">📶</div>
+                    <h3>Wi-Fi de Alta Velocidade</h3>
+                    <p>Fique conectado com a sua família e mande mensagens mesmo nos pontos cegos de sinal de operadora.</p>
+                </div>
+                <div class="card-amenity">
+                    <div class="icon-box">🐾</div>
+                    <h3>Parada Pet Friendly</h3>
+                    <p>Sua família viaja completa! Seus animais de estimação são muito bem-vindos em nossa estrutura.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- [SEÇÃO 4] VISTA DA CIDADE -->
+    <section class="city-view">
+        <div class="container">
+            <div class="view-split">
+                <div class="view-content">
+                    <h2>Uma Refeição com <span>Vista Privilegiada</span></h2>
+                    <p>Além do tempero da roça, o Restaurante Carijó oferece um belíssimo mirante com <strong>vista panorâmica deslumbrante para a cidade</strong>. O cenário perfeito para sentar perto da vidraça, esticar as pernas, relaxar os olhos do asfalto e garantir que a viagem siga muito mais leve e agradável.</p>
+                    <a href="https://www.google.com/maps/place/Restaurante+e+Lanchonete+Carij%C3%B3/@-21.3596353,-46.9470792,19z/data=!4m10!1m2!2m1!1zY2FyaWrDsw!3m6!1s0x94b7b104921769f9:0x5c813c8291e733a!8m2!3d-21.3598662!4d-46.9459332!15sCgdjYXJpasOzWgkiB2Nhcmlqw7OSAQpyZXN0YXVyYW504AEA!16s%2Fg%2F11xgv1x72n?entry=ttu&g_ep=EgoyMDI2MDYxNi4wIKXMDSoASAFQAw%3D%3D" target="_blank" class="btn" style="box-shadow: 0 4px 12px rgba(0,0,0,0.3);">Como Chegar Até Nós</a>
+                </div>
+                <div class="view-image">
+                    <div class="lp-img-box" style="height: 380px;">
+                        <img src="vista-panoramica.jpg" alt="Vista Panorâmica das mesas do Restaurante Carijó">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- [SEÇÃO 5] PREÇOS -->
+    <section class="pricing">
+        <div class="container">
+            <div class="section-header">
+                <h2>Fartura Mineira no Sistema Livre</h2>
+            </div>
+            
+            <div style="margin-bottom: 60px;">
+                <div class="lp-img-box" style="max-height: 450px;">
+                    <img src="galeria-comida.jpg" alt="Balcão de Self-Service e Buffet Mineiro do Carijó">
+                </div>
+            </div>
+
+            <div class="price-grid">
+                <div class="price-card">
+                    <h4>Dias de Semana</h4>
+                    <div class="value">R$ 35,90 <span>Preço Único / Coma à Vontade</span></div>
+                    <p>A parada mais econômica, forte e reforçada para quem vive e trabalha cruzando as estradas de segunda a sexta-feira.</p>
+                </div>
+                <div class="price-card featured">
+                    <h4>Fins de Semana e Feriados</h4>
+                    <div class="value">R$ 43,90 <span>Preço Único / Coma à Vontade</span></div>
+                    <p>O ponto de encontro tradicional para famílias em viagem de lazer e turistas que buscam a gastronomia raiz de Minas.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- [SEÇÃO 6] LOCALIZAÇÃO -->
+    <section class="map-location">
+        <div class="container">
+            <div class="section-header">
+                <h2>Fácil de Achar na Rodovia</h2>
+            </div>
+            <div class="map-details">
+                <span class="badge-road">Rodovia MG-449</span>
+                <p>📍 <strong>Localização Estratégica:</strong> Estamos situados <strong>exatamente em frente à Fábrica da Cory</strong> em Arceburgo - MG.</p>
+                <p>Nossa estrutura possui pátio aberto e plano, totalmente visível da pista. Fique atento às nossas placas de indicação dispostas na rodovia quilômetros antes da sua chegada!</p>
+            </div>
+
+            <div class="lp-img-box" style="max-width: 850px; margin: 0 auto 50px auto; max-height: 400px;">
+                <img src="estacionamento-patio.jpg" alt="Pátio Amplo de Estacionamento do Restaurante Carijó">
+            </div>
+
+            <h3>Horários Servidos</h3>
+            <div class="hours-box">
+                <div class="hours-card"><strong>Horário do Almoço</strong>Das 11h às 15h</div>
+                <div class="hours-card"><strong>Horário do Jantar</strong>Das 19h em diante</div>
+            </div>
+
+            <div style="margin-top: 50px;">
+                <a href="https://www.google.com/maps/place/Restaurante+e+Lanchonete+Carij%C3%B3/@-21.3596353,-46.9470792,19z/data=!4m10!1m2!2m1!1zY2FyaWrDsw!3m6!1s0x94b7b104921769f9:0x5c813c8291e733a!8m2!3d-21.3598662!4d-46.9459332!15sCgdjYXJpasOzWgkiB2Nhcmlqw7OSAQpyZXN0YXVyYW504AEA!16s%2Fg%2F11xgv1x72n?entry=ttu&g_ep=EgoyMDI2MDYxNi4wIKXMDSoASAFQAw%3D%3D" target="_blank" class="btn" style="background-color: #27ae60; box-shadow: 0 4px 15px rgba(39,174,96,0.3);">Iniciar Rota no GPS (Waze / Maps)</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 Restaurante Carijó. Todos os direitos reservados.</p>
+            <p>Conforto, estrutura de pista e a legítima tradição do sítio à mesa.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
