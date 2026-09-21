@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Carijó · Conta pra gente</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Bitter:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+/* =========================================================
+   CONFIGURAÇÃO — edite só aqui
+   ========================================================= */
+</style>
+<script>
+  // 1) Link de avaliação do Google do Carijó.
+  //    No Perfil da Empresa: "Pedir avaliações" → copiar link (g.page/r/...).
+  //    Enquanto não colar, abre a busca do restaurante no Maps.
+  const GOOGLE_REVIEW_URL = "";
+  const GOOGLE_FALLBACK = "https://www.google.com/maps/search/?api=1&query=Restaurante+Carij%C3%B3+Arceburgo";
+
+  // 2) Endpoint do seu CRM que recebe as respostas (POST JSON).
+  //    Vazio = respostas só aparecem no console (modo teste).
+  const ENDPOINT_URL = "";
+
+  // 3) Hora a partir da qual a página agradece pelo jantar.
+  const HORA_JANTAR = 16;
+</script>
+<style>
+:root{
+  --amarelo:#FFCE1F;
+  --amarelo-escuro:#E0AE00;
+  --carvao:#1C1A17;
+  --cal:#F7F8F5;
+  --azul-janela:#1E5AA0;
+  --cinza:#6B665E;
+  --linha:#D9D6CE;
+  --fundo-pena:rgba(28,26,23,.07);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{
+  min-height:100%;
+  font-family:"Bitter",Georgia,"Times New Roman",serif;
+  color:var(--carvao);
+  background-color:var(--cal);
+  /* pena de galinha carijó: pintas pretas espalhadas */
+  background-image:
+    radial-gradient(circle at 20% 30%, var(--fundo-pena) 0 3px, transparent 3.5px),
+    radial-gradient(circle at 70% 65%, var(--fundo-pena) 0 2.5px, transparent 3px),
+    radial-gradient(circle at 45% 85%, var(--fundo-pena) 0 2px, transparent 2.5px),
+    radial-gradient(circle at 88% 18%, var(--fundo-pena) 0 2px, transparent 2.5px);
+  background-size:46px 46px, 38px 38px, 52px 52px, 30px 30px;
+  -webkit-font-smoothing:antialiased;
+}
+
+.app{max-width:480px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column}
+
+/* Faixa amarela tipo letreiro de beira de estrada */
+.letreiro{
+  background:var(--amarelo);
+  border-bottom:4px solid var(--carvao);
+  padding:14px 20px 12px;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+}
+.marca{font-family:"Alfa Slab One",Georgia,serif;font-size:1.75rem;line-height:1;letter-spacing:.01em}
+.cidade{font-size:.8rem;font-weight:600}
+
+.progresso{display:flex;gap:6px;padding:16px 20px 0}
+.progresso span{flex:1;height:5px;border-radius:3px;background:var(--linha);transition:background .25s}
+.progresso span.feito{background:var(--carvao)}
+
+main{flex:1;padding:24px 20px 32px;display:flex;flex-direction:column}
+
+.tela{display:none;flex-direction:column;flex:1;animation:entra .28s ease-out}
+.tela.ativa{display:flex}
+@keyframes entra{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+h1,h2{font-family:"Alfa Slab One",Georgia,serif;font-weight:400;line-height:1.08}
+h1{font-size:2.35rem;margin-bottom:14px}
+h2{font-size:1.7rem;margin-bottom:22px}
+.apoio{font-size:1.05rem;line-height:1.55;color:var(--cinza);max-width:32ch}
+
+.opcoes{display:flex;flex-direction:column;gap:10px}
+.opcao{
+  font:600 1.08rem/1.25 "Bitter",Georgia,serif;
+  color:var(--carvao);text-align:left;
+  background:#fff;border:2px solid var(--carvao);border-radius:10px;
+  padding:17px 18px;min-height:58px;cursor:pointer;
+  box-shadow:3px 3px 0 var(--carvao);
+  transition:transform .08s, box-shadow .08s, background .15s;
+  -webkit-tap-highlight-color:transparent;
+}
+.opcao:active{transform:translate(3px,3px);box-shadow:0 0 0 var(--carvao)}
+.opcao.escolhida{background:var(--amarelo)}
+.grade{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.grade .opcao{text-align:center}
+
+.nota{margin-bottom:26px}
+.nota-rotulo{font-weight:700;font-size:1.1rem;margin-bottom:10px}
+.estrelas{display:flex;gap:6px}
+.estrela{
+  flex:1;aspect-ratio:1;max-width:62px;border:2px solid var(--carvao);border-radius:10px;
+  background:#fff;cursor:pointer;display:grid;place-items:center;
+  -webkit-tap-highlight-color:transparent;transition:background .12s;
+}
+.estrela svg{width:60%;height:60%;fill:none;stroke:var(--carvao);stroke-width:2}
+.estrela.acesa{background:var(--amarelo)}
+.estrela.acesa svg{fill:var(--carvao)}
+
+.botao{
+  font:400 1.2rem/1 "Alfa Slab One",Georgia,serif;
+  background:var(--carvao);color:var(--amarelo);
+  border:none;border-radius:10px;padding:20px 22px;min-height:62px;
+  cursor:pointer;width:100%;margin-top:auto;
+  -webkit-tap-highlight-color:transparent;
+}
+.botao:disabled{opacity:.3;cursor:not-allowed}
+.botao.google{background:var(--azul-janela);color:#fff}
+.voltar{
+  background:none;border:none;font:600 .95rem "Bitter",serif;color:var(--cinza);
+  padding:14px 0 0;cursor:pointer;align-self:flex-start;text-decoration:underline;text-underline-offset:3px;
+}
+
+.fim{justify-content:center;text-align:left}
+.fim .selo{
+  width:84px;height:84px;border-radius:50%;background:var(--amarelo);border:3px solid var(--carvao);
+  display:grid;place-items:center;margin-bottom:24px;
+}
+.fim .selo svg{width:40px;height:40px}
+.fim .apoio{margin-bottom:28px}
+.fim .botao{margin-top:0}
+.rodape{font-size:.82rem;color:var(--cinza);margin-top:18px;line-height:1.5}
+
+button:focus-visible{outline:3px solid var(--azul-janela);outline-offset:3px}
+
+@media (prefers-reduced-motion:reduce){
+  .tela{animation:none}
+  *{transition:none!important}
+}
+@media (min-width:520px){
+  .app{margin-top:24px;min-height:auto;background:var(--cal);border:3px solid var(--carvao);border-radius:14px;overflow:hidden}
+  main{min-height:560px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="letreiro">
+    <div class="marca">Carijó</div>
+    <div class="cidade">Arceburgo · MG</div>
+  </header>
+
+  <div class="progresso" id="progresso" aria-hidden="true" hidden>
+    <span></span><span></span><span></span><span></span><span></span>
+  </div>
+
+  <main>
+    <!-- ABERTURA -->
+    <section class="tela ativa" data-tela="0">
+      <h1>Primeira vez aqui?</h1>
+      <p class="apoio">Conta pra gente como foi. São cinco toques e dura uns 30 segundos.</p>
+      <button class="botao" style="margin-top:36px" onclick="ir(1)">Começar</button>
+    </section>
+
+    <!-- 1 -->
+    <section class="tela" data-tela="1">
+      <h2>É sua primeira vez no Carijó?</h2>
+      <div class="grade" data-campo="primeira_vez">
+        <button class="opcao" data-valor="sim">Sim</button>
+        <button class="opcao" data-valor="nao">Não</button>
+      </div>
+      <button class="voltar" onclick="ir(0)">Voltar</button>
+    </section>
+
+    <!-- 2 -->
+    <section class="tela" data-tela="2">
+      <h2>Como você conheceu a gente?</h2>
+      <div class="opcoes" data-campo="como_conheceu">
+        <button class="opcao" data-valor="instagram_facebook">Instagram ou Facebook</button>
+        <button class="opcao" data-valor="google_mapa">Google ou mapa</button>
+        <button class="opcao" data-valor="indicacao">Alguém indicou</button>
+        <button class="opcao" data-valor="estrada">Vi passando na estrada</button>
+        <button class="opcao" data-valor="ja_conhecia">Já conhecia</button>
+      </div>
+      <button class="voltar" onclick="ir(1)">Voltar</button>
+    </section>
+
+    <!-- 3 -->
+    <section class="tela" data-tela="3">
+      <h2>De onde você vem?</h2>
+      <div class="opcoes" data-campo="origem">
+        <button class="opcao" data-valor="arceburgo">Arceburgo</button>
+        <button class="opcao" data-valor="vizinha_30km">Cidade vizinha, até 30 km</button>
+        <button class="opcao" data-valor="mais_longe">Mais longe</button>
+        <button class="opcao" data-valor="viagem">Estou de viagem</button>
+      </div>
+      <button class="voltar" onclick="ir(2)">Voltar</button>
+    </section>
+
+    <!-- 4 -->
+    <section class="tela" data-tela="4">
+      <h2>Quantas pessoas na mesa?</h2>
+      <div class="grade" data-campo="pessoas">
+        <button class="opcao" data-valor="1">1</button>
+        <button class="opcao" data-valor="2">2</button>
+        <button class="opcao" data-valor="3-4">3 a 4</button>
+        <button class="opcao" data-valor="5+">5 ou mais</button>
+      </div>
+      <button class="voltar" onclick="ir(3)">Voltar</button>
+    </section>
+
+    <!-- 5 -->
+    <section class="tela" data-tela="5">
+      <h2>Que nota você dá?</h2>
+      <div class="nota">
+        <div class="nota-rotulo" id="rot-comida">Comida</div>
+        <div class="estrelas" data-nota="nota_comida" role="radiogroup" aria-labelledby="rot-comida"></div>
+      </div>
+      <div class="nota">
+        <div class="nota-rotulo" id="rot-atend">Atendimento</div>
+        <div class="estrelas" data-nota="nota_atendimento" role="radiogroup" aria-labelledby="rot-atend"></div>
+      </div>
+      <button class="botao" id="enviar" disabled onclick="enviar()">Enviar</button>
+      <button class="voltar" onclick="ir(4)">Voltar</button>
+    </section>
+
+    <!-- FIM -->
+    <section class="tela fim" data-tela="6">
+      <div class="selo" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#1C1A17" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+      </div>
+      <h1 id="obrigado">Obrigado por almoçar no Carijó</h1>
+      <p class="apoio">Se gostou, conta no Google também. É o que ajuda quem está na estrada a achar a gente.</p>
+      <a class="botao google" id="link-google" target="_blank" rel="noopener" style="text-align:center;text-decoration:none;display:block">Avaliar no Google</a>
+      <p class="rodape">Comida caseira de segunda a sexta, no almoço e na janta.</p>
+    </section>
+  </main>
+</div>
+
+<script>
+  const respostas = {};
+  const total = 5;
+
+  function ir(n){
+    document.querySelectorAll(".tela").forEach(t => t.classList.toggle("ativa", +t.dataset.tela === n));
+    const barra = document.getElementById("progresso");
+    barra.hidden = (n === 0 || n === 6);
+    barra.querySelectorAll("span").forEach((s,i) => s.classList.toggle("feito", i < n));
+    window.scrollTo(0,0);
+  }
+
+  // Perguntas de toque único: marca e avança sozinho
+  document.querySelectorAll("[data-campo]").forEach(grupo => {
+    grupo.addEventListener("click", e => {
+      const b = e.target.closest(".opcao"); if(!b) return;
+      grupo.querySelectorAll(".opcao").forEach(o => o.classList.remove("escolhida"));
+      b.classList.add("escolhida");
+      respostas[grupo.dataset.campo] = b.dataset.valor;
+      const atual = +grupo.closest(".tela").dataset.tela;
+      setTimeout(() => ir(atual + 1), 220);
+    });
+  });
+
+  // Estrelas
+  const svgEstrela = '<svg viewBox="0 0 24 24"><path d="M12 2.8l2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17.2l-5.7 3.1 1.2-6.4-4.7-4.4 6.4-.8z" stroke-linejoin="round"/></svg>';
+  document.querySelectorAll("[data-nota]").forEach(grupo => {
+    for(let i=1;i<=5;i++){
+      const b = document.createElement("button");
+      b.className = "estrela"; b.type = "button";
+      b.setAttribute("role","radio"); b.setAttribute("aria-checked","false");
+      b.setAttribute("aria-label", i + (i===1?" estrela":" estrelas"));
+      b.innerHTML = svgEstrela;
+      b.onclick = () => {
+        respostas[grupo.dataset.nota] = i;
+        grupo.querySelectorAll(".estrela").forEach((s,idx) => {
+          s.classList.toggle("acesa", idx < i);
+          s.setAttribute("aria-checked", idx === i-1 ? "true" : "false");
+        });
+        document.getElementById("enviar").disabled = !(respostas.nota_comida && respostas.nota_atendimento);
+      };
+      grupo.appendChild(b);
+    }
+  });
+
+  function enviar(){
+    const agora = new Date();
+    const hora = agora.getHours();
+    const servico = hora >= HORA_JANTAR ? "jantar" : "almoco";
+    const payload = {
+      ...respostas,
+      servico,
+      dia_semana: ["domingo","segunda","terca","quarta","quinta","sexta","sabado"][agora.getDay()],
+      data_hora: agora.toISOString()
+    };
+
+    if(ENDPOINT_URL){
+      fetch(ENDPOINT_URL, {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(payload), keepalive:true})
+        .catch(() => {});
+    } else {
+      console.log("[Carijó] resposta (modo teste):", payload);
+    }
+
+    document.getElementById("obrigado").textContent =
+      servico === "jantar" ? "Obrigado por jantar no Carijó" : "Obrigado por almoçar no Carijó";
+    ir(6);
+  }
+
+  document.getElementById("link-google").href = GOOGLE_REVIEW_URL || GOOGLE_FALLBACK;
+</script>
+</body>
+</html>
